@@ -6,14 +6,17 @@ class SessionsController < ApplicationController
     email = params[:session][:email].downcase
     password = params[:session][:password]
     if login(email,password)
+      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
+      #remember user
       flash[:success]='ログインに成功しました。'
       redirect_to @user
     else
-      flash.now[:danger] = 'ログインに失敗しました。'
+      flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end
   end
   def destroy
+    log_out if logged_in?
     session[:user_id] = nil
     flash[:success] = 'ログアウトしました。'
     redirect_to root_url

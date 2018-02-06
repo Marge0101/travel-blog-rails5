@@ -101,3 +101,19 @@ footer {
     }
   }
 }
+
+/* forms */
+
+.checkbox {
+  margin-top: -12px;
+  margin-bottom: 12px;
+  span {
+    margin-left: 20px;
+    font-weight: normal;
+  }
+}
+
+#session_remember_me {
+  width: auto;
+  margin-left: 0;
+}

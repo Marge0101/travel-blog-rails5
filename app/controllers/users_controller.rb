@@ -20,6 +20,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      log_in @user #ユーザー登録中にログイン
       flash[:success] = "Let's share your recomend place!"
       redirect_to @user
     else
