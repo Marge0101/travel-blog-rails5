@@ -1,0 +1,39 @@
+<ul class="media-list">
+  <% microposts.each do |micropost| %>
+    <% user = micropost.user %>
+    <li class="media">
+      <div class="media-left">
+        <img class="media-object img-rounded" src="<%= gravatar_url(user, options = { size: 50 }) %>" alt="">
+      </div>
+      <div class="media-body">
+        <div>
+          <%= link_to user.name, user_path(user) %> <span class="text-muted">posted at <%= micropost.created_at %></span>
+        </div>
+        <div>
+          <p><%= micropost.content %></p>
+        </div>
+        <div>
+          <% if current_user == micropost.user %>
+            <%= link_to "Delete", micropost, method: :delete, data: { confirm: "You sure?" }, class: 'btn btn-danger btn-xs' %>
+          <% end %>
+        </div>
+        
+        <% unless current_user == micropost.user %>
+          <% if current_user.favorite?(micropost) %>
+            <%= form_for(current_user.favorites.find_by(micropost_id: micropost.id), 
+            html: { method: :delete }) do |f| %>
+            <%= hidden_field_tag :micropost_id, micropost.id %>
+            <%= f.submit 'Unfavorite', class: 'btn btn-default btn-xs' %>
+            <% end %>
+          <% else %>
+            <%= form_for(current_user.favorites.build)do |f| %>
+            <%= hidden_field_tag :micropost_id, micropost.id %>
+            <%= f.submit 'Favorite', class: 'btn btn-success btn-xs' %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </li>
+  <% end %>
+  <%= paginate microposts %>
+</ul>
