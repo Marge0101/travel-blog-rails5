@@ -1,16 +1,20 @@
 <% if logged_in? %>
 <div class="row">
     <aside class="col-md-4">
+      <section class="user_info">
+     <%= render 'users/user_info' %>
+      </section>
       <%= form_for(@micropost) do |f| %>
         <div class="form-group">
-          <%= f.text_area :content, class: 'form-control', rows: 5 %>
+          <%= f.text_area :content,placeholder: "Please add your comment..." ,class: 'form-control', rows: 5 %>
         </div>
         <%= f.submit 'Post', class: 'btn btn-primary btn-block' %>
       <% end %>
       <%= link_to 'Favorites', favorites_microposts_user_path(current_user),class: 'btn btn-warning btn-block' %>
 
     </aside>
-    <div class="col-xs-8">
+    <div class="col-md-8">
+      <h3>Micropost Feed</h3>
       <%= render 'microposts/microposts', microposts: @microposts %>
     </div>
   </div>
