@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
       #remember user
       flash[:success]='ログインに成功しました。'
       redirect_to @user
+      #redirect_back_or user
     else
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
