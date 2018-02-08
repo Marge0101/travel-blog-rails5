@@ -3,22 +3,38 @@ class SessionsController < ApplicationController
   end
 
   def create
-    email = params[:session][:email].downcase
-    password = params[:session][:password]
-    if login(email,password)
-      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-      #remember user
-      flash[:success]='ログインに成功しました。'
-      redirect_to @user
-      #redirect_back_or user
+    
+    #email = params[:session][:email].downcase
+    #password = params[:session][:password]
+    user = User.find_by(email: params[:session][:email].downcase)
+    if user && user.authenticate(params[:session][:password])
+      if user.activated?
+        flash[:success]='ログインに成功しました。'
+        log_in user
+        params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
+        redirect_to user
+      else
+          message  = "Account not activated. "
+          message += "Check your email for the activation link."
+          flash[:warning] = message
+          redirect_to root_url
+      end
     else
-      flash.now[:danger] = 'Invalid email/password combination'
+     flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end
   end
+    
+   #<--通常ログイン向け--> 
+    #if login(email,password)
+      #remember user
+      #flash[:success]='ログインに成功しました。'
+      #redirect_to @user
+    #<--ここまで通常ログイン向け--> 
+
   def destroy
     log_out if logged_in?
-    session[:user_id] = nil
+    #session[:user_id] = nil
     flash[:success] = 'ログアウトしました。'
     redirect_to root_url
   end

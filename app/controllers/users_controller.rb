@@ -20,11 +20,17 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-
     if @user.save
-      log_in @user #ユーザー登録中にログイン
-      flash[:success] = "Let's share your recomend place!"
-      redirect_to @user
+      @user.send_activation_email
+      #UserMailer.account_activation(@user).deliver_now
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
+      
+      #<---activation 機能なし
+      #log_in @user #ユーザー登録中にログイン
+      #flash[:success] = "Let's share your recomend place!"
+      #redirect_to @user
+      #-->
     else
       flash.now[:danger] = "Sorry try again!"
       render :new
