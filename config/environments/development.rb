@@ -2,7 +2,7 @@ Rails.application.configure do
   
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :test
-  host = 'travel-app-test.herokuapp.com'
+  host = 'test-trav.herokuapp.com/'
   config.action_mailer.default_url_options = { host: host, protocol: 'https' }
   
   
